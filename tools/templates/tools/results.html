@@ -1,0 +1,27 @@
+<h1>{{ tool.tool_name }}</h1>
+
+<p>You succesfully uploaded a file</p>
+<hr>
+<p>Your motif was found in {{ freq }}% of input sequences.</p>
+<p>Expected frequency: {{expfreq}}%</p>
+<hr>
+<!--
+<p>Most frequent base per peak:</p>
+<table>
+  <tr>
+    <th>Region</th>
+    <th>Base</th>
+    <th>Frequency</th>
+  </tr>
+  {% for key, values in motif.items %}
+  <tr>
+    <td>{{ key }}</td>
+    {% for val in values %}
+    <td>{{ val }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+--->
+
+<a href="{% url 'detail' tool.tool_name %}">New file</a>

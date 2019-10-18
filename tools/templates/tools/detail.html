@@ -1,0 +1,11 @@
+<h1>{{ tool.tool_name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'upload' tool.tool_name %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<input type="file" name="file" accept="text/*">
+<input type="text" name="motif" value="Your favourite motif">
+<input type="text" name="overlap" value="Overlap", placeholder="Minimum Overlap">
+<input type="submit" value="Upload">
+</form>

@@ -1,0 +1,14 @@
+{% if tool_list %}
+    <ul>
+    {% for tool in tool_list %}
+        <li><a href="/tools/{{ tool.tool_name }}/">{{ tool.tool_name }}</a>
+        {% if tool.tool_description %}
+        <p>{{ tool.tool_description }}</p>
+        {% endif %}
+        </li>
+
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tools are available.</p>
+{% endif %}
