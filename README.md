@@ -1,13 +1,20 @@
 # Website
+---
 
-Template van https://www.w3schools.com/w3css/w3css_templates.asp <br>
-Open home.html in browser om website te zien.
+Het hele project staat er eindelijk op! <br>
+Om te synchroniseren run: git clone https://github.com/DelFaveroFanclub/Website <br>
+Of download github for desktop: https://desktop.github.com/ (Windows en Mac beschikbaar) <br> <br>
 
-## Locomotif.tar.gz
+Grote aanpassingen (zeker in de python code) liefst in een nieuwe branch. <br> <br>
 
+### Instructions:
+---
 <ol>
-  <li>Extract</li>
-  <li>Install django (conda install django): Doe dit in nieuwe virtualenv (conda create -n django python=3.7; source activate django)</li>
-  <li>cd locomotif</li>
-  <li>./manage.py runserver</li>
+  <li>Install django (conda install django)</li>
+  <li>Clone repository to local directory (see above)</li>
+  <li>cd Website</li>
+  <li>python manage.py runserver</li>
+  <li>copy pasta link in browser window</li>
 </ol>
+  
+Voorlopig werkt de tool niet op Safari (Firefox en Chrome zouden moeten werken).
