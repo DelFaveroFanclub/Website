@@ -3,3 +3,6 @@
 
 #ignore all caches
 **/__pycache__
+
+#ignore all uploads
+**/uploads

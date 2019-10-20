@@ -221,7 +221,7 @@ class Motif(Gene):
             for i,base in enumerate(seq):
                 pos_bases = IUPAC_CODES_DNA[base]
                 for b in pos_bases:
-                    pwm[i,DNA_BASES.index(b)] = 1/len(pos_bases)
+                    pwm[i,DNA_BASES.index(b)] = 1
 
 
         self.pwm = pwm
@@ -255,7 +255,10 @@ class Motif(Gene):
             gene_pwm = gene.PWM()
             score = np.sum(gene_pwm * self.pwm)/len(self)
             scorelist.append(score)
-        return max(scorelist)
+        try:
+            return max(scorelist)
+        except ValueError:
+            return 0
 
 #Is Motif present in gene?
     def is_present_in(self, gene, min_overlap = 1):
@@ -318,9 +321,48 @@ class BED():
     def __str__(self):
         return self._BEDFILE
     
+    
+    def split_by_chrom(self):
+        split_list = []
+        for i in range(1,len(self.pos_list)):
+            same = self.pos_list[i].split(':')[0] == self.pos_list[i-1].split(':')[0]
+            if not same:
+                split_list.append(i)
+        chrom_list = [self.pos_list[i:j] for i,j in zip([0] + split_list, split_list + [None])]
+        return chrom_list
+            
     def get_sequences(self):
-        pass
+        chrom_list = self.split_by_chrom()
+        start_index = 0
+        
+        for chrom in chrom_list:
+            chrom_num = chrom[0].split(':')[0][3:]
+            if chrom_num.upper() == 'X': 
+                chrom_num = 23
+            elif chrom_num.upper() == 'Y': 
+                chrom_num = 24
+            elif chrom_num.upper() == 'M':
+                chrom_num = 25
+            else: 
+                try:
+                    chrom_num = int(chrom_num) 
+                except ValueError:
+                    raise ValueError(chrom_num + ' is not a valid chromosome number')
+            
+            file = 'genome/xx%02d' % chrom_num
+            Whole_Chrom = Gene(file=file)
+            
+            for i, region in enumerate(chrom):
+                start, stop = region.split(':')[1].split('-')
+                gene = Whole_Chrom[(int(start)-1):int(stop)]
+                self.gene_list[start_index+i] = gene
+                
+            start_index += len(chrom)
+            print(chrom[0].split(':')[0] + ' found')
+        
+        return self.gene_list
 
+            
     def get_sequences_from_ucsc(self,ref_genome='hg19'):
         try:
             http = urllib3.connection_from_url('https://api.genome.ucsc.edu')
