@@ -9,10 +9,14 @@ Created on Sat Sep 29 09:20:17 2018
 
 from collections.abc import Sequence
 import reprlib
-import urllib3
 import ast
 from json import dump
 import numpy as np
+
+try:
+    import urllib3
+except ModuleNotFoundError:
+    print('urllib3 not found, BED.get_sequences_from_uscs() not available')
 
 #Prepare codon library
 RNA_BASES = 'UCAG'
@@ -313,14 +317,25 @@ class BED():
 
     def __str__(self):
         return self._BEDFILE
+    
+    def get_sequences(self):
+        pass
 
-    def get_sequences(self,ref_genome='hg19'):
-        http = urllib3.connection_from_url('https://api.genome.ucsc.edu')
+    def get_sequences_from_ucsc(self,ref_genome='hg19'):
+        try:
+            http = urllib3.connection_from_url('https://api.genome.ucsc.edu')
+        except NameError:
+            print('urllib3 not found, exit 1')
+            return 1
         for i, pos in enumerate(self.pos_list):
             ch, dom = pos.split(':')
             start,stop = dom.split('-')
             url = '/getData/sequence?genome={};chrom={};start={};end={}'.format(ref_genome, ch,start,stop)
-            response = http.request('GET',url)
+            try:
+                response = http.request('GET',url)
+            except urllib3.exceptions.MaxRetryError:
+                print('Sequence could not be retrieved from ucsc (MaxRetryError), continuing')
+                continue
             s = response.data.decode().strip()
             DNA = ast.literal_eval(s)['dna']
             self.gene_list[i] = Gene(seq=DNA,region=pos)
