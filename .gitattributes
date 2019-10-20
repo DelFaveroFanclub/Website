@@ -1,1 +1,2 @@
+xx* filter=lfs diff=lfs merge=lfs -text
 tools/LocoMotif/genome/* filter=lfs diff=lfs merge=lfs -text
