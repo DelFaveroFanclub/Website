@@ -12,6 +12,7 @@ import reprlib
 import ast
 from json import dump
 import numpy as np
+import os
 
 try:
     import urllib3
@@ -349,7 +350,9 @@ class BED():
                 except ValueError:
                     raise ValueError(chrom_num + ' is not a valid chromosome number')
             
-            file = 'genome/xx%02d' % chrom_num
+            filedir = os.path.dirname(os.path.abspath(__file__))
+            filename = 'genome/xx%02d' % chrom_num
+            file = os.path.join(filedir,filename)
             Whole_Chrom = Gene(file=file)
             
             for i, region in enumerate(chrom):
